@@ -19,6 +19,11 @@ export default class Machine {
         this.V = new Uint8Array(0x10)
 
         /**
+         * Alias for this.V[F] register
+         */
+        this.VF = this.V[0xF]
+
+        /**
          * 16-bit register for memory addressing
          */
         this.I = 0x0000
@@ -156,6 +161,123 @@ export default class Machine {
      */
     _8XY0(_, X, Y) {
         this.V[X] = this.V[Y]
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Sets VX to VX or VY
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     * @param {Number} Y Register identifier
+     *
+     * @return {void}
+     */
+    _8XY1(_, X, Y) {
+        this.V[X] = this.V[X] | this.V[Y]
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Sets VX to VX and VY
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     * @param {Number} Y Register identifier
+     *
+     * @return {void}
+     */
+    _8XY2(_, X, Y) {
+        this.V[X] = this.V[X] & this.V[Y]
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Sets VX to VX xor VY
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     * @param {Number} Y Register identifier
+     *
+     * @return {void}
+     */
+    _8XY3(_, X, Y) {
+        this.V[X] = this.V[X] ^ this.V[Y]
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Adds VY to VX. VF is set to 1 when there's a carry, and to 0 when there is not
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     * @param {Number} Y Register identifier
+     *
+     * @return {void}
+     */
+    _8XY4(_, X, Y) {
+        const sum = (this.V[X] += this.V[Y])
+        this.VF = (sum > 0xFF) ? 1 : 0
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * VY is subtracted from VX. VF is set to 0 when there's a borrow, and 1 when there is not
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     * @param {Number} Y Register identifier
+     *
+     * @return {void}
+     */
+    _8XY5(_, X, Y) {
+        this.V[X] -= this.V[Y]
+        this.VF = (this.V[X] > this.V[Y]) ? 1 : 0
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Stores the least significant bit of VX in VF and then shifts VX to the right by 1
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     * @param {Number} Y Register identifier
+     *
+     * @return {void}
+     */
+    _8XY6(_, X, Y) {
+        this.VF = this.V[X] & 1
+        this.V[X] >>= 1
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Sets VX to VY minus VX. VF is set to 0 when there's a borrow, and 1 when there is not
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     * @param {Number} Y Register identifier
+     *
+     * @return {void}
+     */
+    _8XY7(_, X, Y) {
+        this.V[X] = (this.V[Y] - this.V[X])
+        this.VF = (this.V[Y] > this.V[X]) ? 1 : 0
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Stores the most significant bit of VX in VF and then shifts VX to the left by 1
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     * @param {Number} Y Register identifier
+     *
+     * @return {void}
+     */
+    _8XYE(_, X, Y) {
+        this.VF = this.V[X] & 128
+        this.V[X] <<= 1
         this.PC += Instruction.SIZE
     }
 }
