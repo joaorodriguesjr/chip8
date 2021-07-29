@@ -64,7 +64,7 @@ export default class Machine {
         }
 
         const method = this.instructions.get(instruction.code)
-        this[method].call(this, instruction.data, instruction.x, instruction.y)
+        this[method](instruction.data, instruction.x, instruction.y)
     }
 
     /**
