@@ -17,11 +17,9 @@ export default class Machine {
 
     /**
      * @param {Display} display
-     * @param {Map<Number, String>} instructions
      */
-    constructor(display, instructions) {
+    constructor(display) {
         this.display = display
-        this.instructions = instructions
 
         /**
          * 4096 bytes of addressable memory

@@ -1,4 +1,3 @@
-import Config from './Chip8/Config.js'
 import Machine from './Chip8/Machine.js'
 import Display from './Chip8/Display.js'
 import Renderer from './Renderer/Canvas.js'
@@ -14,7 +13,7 @@ const display = new Display(COLS, ROWS)
 const renderer = new Renderer(canvas, SCALE)
 
 
-const vm = new Machine(display, Config.instructions)
+const vm = new Machine(display)
 
 vm.memory[0x0100] = 0xBA
 vm.memory[0x0101] = 0x7C
