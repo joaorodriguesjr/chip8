@@ -2,15 +2,15 @@ import Machine from './Chip8/Machine.js'
 import Display from './Chip8/Display.js'
 import Renderer from './Renderer/Canvas.js'
 
-const COLS = 64, ROWS = 32
-const SCALE = 10
+const DISPLAY_COLS = 64, DISPLAY_ROWS = 32
+const RENDERER_SCALE = 12
 
 const canvas = document.querySelector('#display-canvas')
-canvas.width  = COLS * SCALE
-canvas.height = ROWS * SCALE
+canvas.width  = DISPLAY_COLS * RENDERER_SCALE
+canvas.height = DISPLAY_ROWS * RENDERER_SCALE
 
-const display = new Display(COLS, ROWS)
-const renderer = new Renderer(canvas, SCALE)
+const display = new Display(DISPLAY_COLS, DISPLAY_ROWS)
+const renderer = new Renderer(canvas, RENDERER_SCALE)
 
 
 const vm = new Machine(display)
