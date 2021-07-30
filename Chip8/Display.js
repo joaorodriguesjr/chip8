@@ -14,16 +14,16 @@ export default class Display {
     }
 
     /**
+     * Toggles a pixel at a given position
+     *
      * @param {Number} col
      * @param {Number} row
-     * @param {Number} value
+     *
+     * @return {Number} The new state of the pixel
      */
-    pixel(col, row, value = 1) {
+    toggle(col, row) {
         const index = col + (row * this.cols)
-        const flipped = (this.data[index] === 1 && value === 0)
-        this.data[index] = value
-
-        return flipped
+        return this.data[index] ^= 1
     }
 
     /**

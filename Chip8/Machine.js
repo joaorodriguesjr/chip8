@@ -364,25 +364,25 @@ export default class Machine {
      * @return {void}
      */
     _DXYN(N, X, Y) {
-        const WDTH = 8
-        const HGHT = N
+        const SPRITE_WDTH = 8
+        const SPRITE_HGHT = N
 
         let row = 0
         let col = 0
 
         const bit = (byte, col) => (byte & (Machine.MSB >> col))
 
-        while (row < HGHT) { const byte = this.memory[this.I + row]
-        while (col < WDTH) {
+        while (row < SPRITE_HGHT) { const byte = this.memory[this.I + row]
+        while (col < SPRITE_WDTH) {
 
-            if (bit(byte, col) !== 0) {
-                const flipped = this.display.pixel(this.V[X] + col, this.V[Y] + row)
-                this.VF = (flipped) ? 1 : 0
+            if (bit(byte, col)) {
+                const pixel = this.display.toggle(this.V[X] + col, this.V[Y] + row)
+                this.VF = (pixel ^ 1)
             }
 
             col ++
         }
-            col -= WDTH
+            col -= SPRITE_WDTH
             row ++
         }
 
