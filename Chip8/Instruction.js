@@ -1,4 +1,5 @@
 import Config from './Config.js'
+import Machine from './Machine.js'
 
 export default class Instruction {
 
@@ -10,6 +11,23 @@ export default class Instruction {
     constructor(value) {
         this.value = value
         this.group = this.extract(Config.groupMask)
+    }
+
+    /**
+     * Calls the instruction in the machine object
+     *
+     * @param {Machine} machine
+     *
+     * @return {void}
+     * @throws {Error} If instruction is not supported
+     */
+    call(machine) {
+        if (! Config.instructions.has(this.code)) {
+            throw new Error(`Not supported instruction. CODE: ${this.code}`)
+        }
+
+        const method = Config.instructions.get(this.code)
+        machine[method](this.data, this.x, this.y)
     }
 
     /**
@@ -29,21 +47,21 @@ export default class Instruction {
     /**
      * @return {Number}
      */
-     get data() {
+    get data() {
         return this.extract(Config.dataMasks.get(this.group))
     }
 
     /**
      * @return {Number}
      */
-     get x() {
+    get x() {
         return this.extract(Config.xMasks.get(this.group)) >> 8
     }
 
     /**
      * @return {Number}
      */
-     get y() {
+    get y() {
         return this.extract(Config.yMasks.get(this.group)) >> 4
     }
 }

@@ -67,19 +67,7 @@ export default class Machine {
         const LO = this.memory[this.PC + 1]
 
         const instruction = new Instruction(HI << 8 | LO)
-        this.execute(instruction)
-    }
-
-    /**
-     * @param {Instruction} instruction
-     */
-    execute(instruction) {
-        if (! this.instructions.has(instruction.code)) {
-            throw new Error(`Not supported instruction code: ${instruction.code}`)
-        }
-
-        const method = this.instructions.get(instruction.code)
-        this[method](instruction.data, instruction.x, instruction.y)
+        instruction.call(this)
     }
 
     /**
@@ -98,7 +86,9 @@ export default class Machine {
     /**
      * Not implemented instruction
      */
-    _0NNN(_) { }
+    _0NNN(_) {
+        return
+    }
 
     /**
      * Jumps to address NNN
