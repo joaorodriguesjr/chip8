@@ -11,7 +11,7 @@ body {
 }
 
 canvas {
-    background: rgb(118, 233, 118);
-    border: 8px solid rgb(109, 218, 109);
-    border-radius: 8px;
+    background: rgb(133, 219, 133);
+    border: 8px solid rgb(131, 207, 131);
+    border-radius: 12px;
 }
