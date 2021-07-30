@@ -6,11 +6,24 @@ export default class Display {
     constructor(cols, rows) {
         this.cols = cols
         this.rows = rows
-        this.clear()
+
+        this.initialize()
+    }
+
+    initialize() {
+        /**
+         * @type {Array<Pixel>}
+         */
+        this.pixels = []
+
+        for (let row = 0; row < this.rows; row ++) {
+        for (let col = 0; col < this.cols; col ++) {
+            this.pixels[col + (row * this.cols)] = new Pixel(0, row, col)
+        }}
     }
 
     clear() {
-        this.data = new Uint8Array(this.cols * this.rows)
+        this.initialize()
     }
 
     /**
@@ -22,19 +35,7 @@ export default class Display {
      * @return {Number} The new state of the pixel
      */
     toggle(col, row) {
-        const index = col + (row * this.cols)
-        return this.data[index] ^= 1
-    }
-
-    /**
-     * @return {Array<Pixel>}
-     */
-    get pixels() {
-        const mapper = (value, index) => {
-            return new Pixel(value, this.col(index), this.row(index))
-        }
-
-        return Array.from(this.data).map(mapper)
+        return this.pixels[col + (row * this.cols)].toggle()
     }
 
     /**
@@ -61,12 +62,16 @@ export default class Display {
 class Pixel {
     /**
      * @param {NUmber} value
-     * @param {Number} col
      * @param {Number} row
+     * @param {Number} col
      */
-    constructor(value, col, row) {
+    constructor(value, row, col) {
         this.value = value
-        this.col = col
         this.row = row
+        this.col = col
+    }
+
+    toggle() {
+        return this.value ^= 1
     }
 }
