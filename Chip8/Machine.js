@@ -1,4 +1,5 @@
 import Display from './Display.js'
+import Keyboard from './Keyboard.js'
 import Instruction from './Instruction.js'
 
 export default class Machine {
@@ -17,9 +18,11 @@ export default class Machine {
 
     /**
      * @param {Display} display
+     * @param {Keyboard} keyboard
      */
-    constructor(display) {
+    constructor(display, keyboard) {
         this.display = display
+        this.keyboard = keyboard
 
         /**
          * 4096 bytes of addressable memory
@@ -55,12 +58,19 @@ export default class Machine {
          * 16-bit program counter
          */
         this.PC = 0x0000
+
+        /**
+         * The halting state
+         */
+        this.HLT = false
     }
 
     /**
      * Executes a machine cycle
      */
     cycle() {
+        if (this.HLT) return
+
         const HI = this.memory[this.PC + 0]
         const LO = this.memory[this.PC + 1]
 
@@ -374,6 +384,62 @@ export default class Machine {
             row ++
         }
 
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Skips the next instruction if the key stored in VX is pressed
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
+     */
+    _EX9E(_, X) {
+        if (this.keyboard.isPressed(this.V[X])) {
+            this.PC += (Instruction.SIZE * 2)
+
+            return
+        }
+
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Skips the next instruction if the key stored in VX is not pressed
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
+     */
+    _EXA1(_, X) {
+        if (! this.keyboard.isPressed(this.V[X])) {
+            this.PC += (Instruction.SIZE * 2)
+
+            return
+        }
+
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * A key press is awaited, and then stored in VX. (Blocking Operation. All instruction halted until next key event)
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
+     */
+    _FX0A(_, X) {
+        this.HLT = true
+
+        const onKeyPress = (key) => {
+            this.HLT = false
+            this.V[X] = key
+        }
+
+        this.keyboard.waitKeyPress(onKeyPress)
         this.PC += Instruction.SIZE
     }
 }

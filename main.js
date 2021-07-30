@@ -1,5 +1,6 @@
 import Machine from './Chip8/Machine.js'
 import Display from './Chip8/Display.js'
+import Keyboard from './Chip8/Keyboard.js'
 import Renderer from './Renderer/Canvas.js'
 
 const DISPLAY_COLS = 64, DISPLAY_ROWS = 32
@@ -10,10 +11,11 @@ canvas.width  = DISPLAY_COLS * RENDERER_SCALE
 canvas.height = DISPLAY_ROWS * RENDERER_SCALE
 
 const display = new Display(DISPLAY_COLS, DISPLAY_ROWS)
+const keyboard = new Keyboard()
 const renderer = new Renderer(canvas, RENDERER_SCALE)
 
 
-const vm = new Machine(display)
+const vm = new Machine(display, keyboard)
 
 vm.memory[0x0100] = 0xBA
 vm.memory[0x0101] = 0x7C
@@ -28,6 +30,8 @@ vm.V[2] = 5
 
 vm.memory[0x000] = 0xD1
 vm.memory[0x001] = 0x26
+vm.memory[0x002] = 0xF1
+vm.memory[0x003] = 0x0A
 
 setInterval(() => {
 
