@@ -1,11 +1,26 @@
+import Display from './Display.js'
 import Instruction from './Instruction.js'
 
 export default class Machine {
 
     /**
+     * Alias for (0b10000000 | 0x80 | 128) the
+     * most significant bit
+     */
+    static MSB = 0b10000000
+
+    /**
+     * Alias for (0b00000001 | 0x01 | 1) the
+     * least significant bit
+     */
+     static LSB = 0b00000001
+
+    /**
+     * @param {Display} display
      * @param {Map<Number, String>} instructions
      */
-    constructor(instructions) {
+    constructor(display, instructions) {
+        this.display = display
         this.instructions = instructions
 
         /**
@@ -246,7 +261,7 @@ export default class Machine {
      * @return {void}
      */
     _8XY6(_, X, Y) {
-        this.VF = this.V[X] & 1
+        this.VF = this.V[X] & Machine.LSB
         this.V[X] >>= 1
         this.PC += Instruction.SIZE
     }
@@ -276,8 +291,101 @@ export default class Machine {
      * @return {void}
      */
     _8XYE(_, X, Y) {
-        this.VF = this.V[X] & 128
+        this.VF = this.V[X] & Machine.MSB
         this.V[X] <<= 1
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Skips the next instruction if VX does not equal VY
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     * @param {Number} Y Register identifier
+     *
+     * @return {void}
+     */
+    _9XY0(_, X, Y) {
+        if (this.V[X] !== this.V[Y]) {
+            this.PC += (Instruction.SIZE * 2)
+
+            return
+        }
+
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Sets I to the address NNN
+     *
+     * @param {Number} NNN 12-bit constant
+     *
+     * @return {void}
+     */
+    _ANNN(NNN) {
+        this.I = NNN
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Jumps to the address NNN plus V0
+     *
+     * @param {Number} NNN 12-bit constant
+     *
+     * @return {void}
+     */
+    _BNNN(NNN) {
+        this.PC = NNN + this.V[0]
+    }
+
+    /**
+     * Sets VX to the result of a bitwise and operation on a random number (Typically: 0 to 255) and NN
+     *
+     * @param {Number} NN 8-bit constant
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
+     */
+    _CXNN(NN, X) {
+        const random = Math.floor(Math.random() * 0xFF)
+        this.V[X] = random & NN
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Draws a sprite at coordinate (VX, VY) that has a width of 8 pixels and a height of N+1 pixels.
+     * Each row of 8 pixels is read as bit-coded starting from memory location I; I value does not change after the execution of this instruction.
+     * As described above, VF is set to 1 if any screen pixels are flipped from set to unset when the sprite is drawn, and to 0 if that does not happen.
+     *
+     * @param {Number} N 4-bit constant
+     * @param {Number} X Register identifier
+     * @param {Number} Y Register identifier
+     *
+     * @return {void}
+     */
+    _DXYN(N, X, Y) {
+        const WDTH = 8
+        const HGHT = N
+
+        let row = 0
+        let col = 0
+
+        const bit = (byte, col) => (byte & (Machine.MSB >> col))
+
+        while (row < HGHT) { const byte = this.memory[this.I + row]
+        while (col < WDTH) {
+
+            if (bit(byte, col) !== 0) {
+                const flipped = this.display.pixel(this.V[X] + col, this.V[Y] + row)
+                this.VF = (flipped) ? 1 : 0
+            }
+
+            col ++
+        }
+            col -= WDTH
+            row ++
+        }
+
         this.PC += Instruction.SIZE
     }
 }

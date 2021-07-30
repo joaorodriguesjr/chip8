@@ -16,10 +16,14 @@ export default class Display {
     /**
      * @param {Number} col
      * @param {Number} row
+     * @param {Number} value
      */
-    pixelOn(col, row) {
+    pixel(col, row, value = 1) {
         const index = col + (row * this.cols)
-        this.data[index] = 1
+        const flipped = (this.data[index] === 1 && value === 0)
+        this.data[index] = value
+
+        return flipped
     }
 
     /**
