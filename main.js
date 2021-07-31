@@ -6,36 +6,33 @@ import Renderer from './Renderer/Canvas.js'
 const DISPLAY_COLS = 64, DISPLAY_ROWS = 32
 const RENDERER_SCALE = 12
 
-const canvas = document.querySelector('#display-canvas')
+const canvas  = document.querySelector('#display-canvas')
 canvas.width  = DISPLAY_COLS * RENDERER_SCALE
 canvas.height = DISPLAY_ROWS * RENDERER_SCALE
 
-const display = new Display(DISPLAY_COLS, DISPLAY_ROWS)
 const keyboard = new Keyboard()
 const renderer = new Renderer(canvas, RENDERER_SCALE)
-
+const display  = new Display(DISPLAY_COLS, DISPLAY_ROWS, renderer)
 
 const vm = new Machine(display, keyboard)
 
-vm.memory[0x0100] = 0xBA
-vm.memory[0x0101] = 0x7C
-vm.memory[0x0102] = 0xD6
-vm.memory[0x0103] = 0xFE
-vm.memory[0x0104] = 0x54
-vm.memory[0x0105] = 0xAA
+const start = () => {
+    const worker = new Worker('./worker.js')
 
-vm.I = 0x0100
-vm.V[1] = 5
-vm.V[2] = 5
+    worker.onmessage = (event) => {
+        if (event.data === 'CLOCK') vm.cycle()
+        if (event.data === 'TIMER') vm.updateTimers()
+    }
+}
 
-vm.memory[0x000] = 0xD1
-vm.memory[0x001] = 0x26
-vm.memory[0x002] = 0xF1
-vm.memory[0x003] = 0x0A
+fetch('./roms/ibm-logo.rom')
+    .then(response => response.arrayBuffer())
+    .then(buffer => {
+        const data = new Uint8Array(buffer)
 
-setInterval(() => {
+        for (const [index, byte] of data.entries()) {
+            vm.memory[vm.PC + index] = byte
+        }
 
-    vm.cycle()
-    renderer.render(display)
-
-}, 1000 / 2)
+        start()
+    })

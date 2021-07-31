@@ -57,7 +57,17 @@ export default class Machine {
         /**
          * 16-bit program counter
          */
-        this.PC = 0x0000
+        this.PC = 0x0200
+
+        /**
+         * Sound Timer
+         */
+        this.ST = 0x0
+
+        /**
+         * Delay Timer
+         */
+        this.DT = 0x0
 
         /**
          * The halting state
@@ -67,6 +77,8 @@ export default class Machine {
 
     /**
      * Executes a machine cycle
+     *
+     * @return {void}
      */
     cycle() {
         if (this.HLT) return
@@ -79,9 +91,22 @@ export default class Machine {
     }
 
     /**
+     * Updates the sound and delay timers
+     *
+     * @return {void}
+     */
+    updateTimers() {
+        if (this.ST > 0) this.ST --
+        if (this.DT > 0) this.DT --
+    }
+
+    /**
      * Clears the screen
      */
-    _00E0() { }
+    _00E0() {
+        this.display.clear()
+        this.PC += Instruction.SIZE
+    }
 
     /**
      * Returns from subroutine
@@ -95,7 +120,7 @@ export default class Machine {
      * Not implemented instruction
      */
     _0NNN(_) {
-        return
+        this.PC += Instruction.SIZE
     }
 
     /**
@@ -384,6 +409,7 @@ export default class Machine {
             row ++
         }
 
+        this.display.render()
         this.PC += Instruction.SIZE
     }
 
@@ -424,6 +450,19 @@ export default class Machine {
     }
 
     /**
+     * Sets VX to the value of the delay timer
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
+     */
+    _FX07(_, X) {
+        this.V[X] = this.DT
+        this.PC += Instruction.SIZE
+    }
+
+    /**
      * A key press is awaited, and then stored in VX. (Blocking Operation. All instruction halted until next key event)
      *
      * @param {Number} _ Always zero parameter
@@ -434,12 +473,117 @@ export default class Machine {
     _FX0A(_, X) {
         this.HLT = true
 
-        const onKeyPress = (key) => {
-            this.HLT = false
+        const onKeyPress = (key) => { this.HLT = false
             this.V[X] = key
         }
 
         this.keyboard.waitKeyPress(onKeyPress)
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Sets the delay timer to VX
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
+     */
+    _FX15(_, X) {
+        this.DT = this.V[X]
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Sets the sound timer to VX
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
+     */
+    _FX18(_, X) {
+        this.ST = this.V[X]
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Adds VX to I. VF is not affected
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
+     */
+    _FX1E(_, X) {
+        this.I  += this.V[X]
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Sets I to the location of the sprite for the character in VX.
+     * Characters 0-F (in hexadecimal) are represented by a 4x5 font
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
+     */
+    _FX29(_, X) {
+        this.I = this.V[X] * 5
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Stores the binary-coded decimal representation of VX, with the most significant of
+     * three digits at the address in I, the middle digit at I plus 1, and the least significant digit at I plus 2.
+     * (In other words, take the decimal representation of VX, place the hundreds digit in memory at
+     * location in I, the tens digit at location I+1, and the ones digit at location I+2.)
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
+     */
+    _FX33(_, X) {
+        this.memory[this.I + 0] = Math.round(this.V[X] / 100)
+        this.memory[this.I + 1] = Math.round(this.V[X] % 100 / 10)
+        this.memory[this.I + 2] = Math.round(this.V[X] % 10)
+
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Stores V0 to VX (including VX) in memory starting at address I.
+     * The offset from I is increased by 1 for each value written, but I itself is left unmodified
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
+     */
+    _FX55(_, X) {
+        for (let offset = 0; offset <= X; offset ++) {
+            this.memory[this.I + offset] = this.V[offset]
+        }
+
+        this.PC += Instruction.SIZE
+    }
+
+    /**
+     * Fills V0 to VX (including VX) with values from memory starting at address I.
+     * The offset from I is increased by 1 for each value written, but I itself is left unmodified
+     *
+     * @param {Number} _ Always zero parameter
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
+     */
+    _FX65(_, X) {
+        for (let offset = 0; offset <= X; offset ++) {
+            this.V[offset] = this.memory[this.I + offset]
+        }
+
         this.PC += Instruction.SIZE
     }
 }

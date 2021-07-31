@@ -3,7 +3,8 @@ export default class Display {
      * @param {Number} cols
      * @param {Number} rows
      */
-    constructor(cols, rows) {
+    constructor(cols, rows, renderer) {
+        this.renderer = renderer
         this.cols = cols
         this.rows = rows
 
@@ -24,6 +25,11 @@ export default class Display {
 
     clear() {
         this.initialize()
+        this.renderer.render(this)
+    }
+
+    render() {
+        this.renderer.render(this)
     }
 
     /**
