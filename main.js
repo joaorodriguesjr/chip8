@@ -3,6 +3,7 @@ import Machine from './Chip8/Machine.js'
 import Display from './Chip8/Display.js'
 import Keyboard from './Chip8/Keyboard.js'
 import Renderer from './Renderer/Canvas.js'
+import Input from './Input/Handler.js'
 
 const DISPLAY_COLS = 64, DISPLAY_ROWS = 32
 const RENDERER_SCALE = 12
@@ -17,13 +18,11 @@ const display  = new Display(DISPLAY_COLS, DISPLAY_ROWS, renderer)
 
 const vm = new Machine(display, keyboard)
 
-const start = () => {
-    const worker = new Worker('./worker.js')
+const input = new Input(keyboard, document)
 
-    worker.onmessage = (event) => {
-        if (event.data === 'CLOCK') vm.cycle()
-        if (event.data === 'TIMER') vm.updateTimers()
-    }
+const start = () => {
+    setInterval(() => vm.cycle(), 1000 / 500)
+    setInterval(() => vm.updateTimers(), 1000 / 60 )
 }
 
 for (const [index, digit] of Config.digits.entries()) {

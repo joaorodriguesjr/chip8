@@ -3,7 +3,7 @@ export default class Keyboard {
         this.keys = new Array(16)
         this.keys.fill(false)
 
-        this.keyPressCallback = () => {}
+        this.onKeyPress = () => {}
     }
 
     /**
@@ -18,12 +18,21 @@ export default class Keyboard {
     /**
      * @param {Number} key
      *
-     * @return {Boolean}
+     * @return {void}
      */
     registerKeyPress(key) {
         this.keys[key] = true
-        this.keyPressCallback(key)
-        this.keyPressCallback = () => {}
+        this.onKeyPress(key)
+        this.onKeyPress = () => {}
+    }
+
+    /**
+     * @param {Number} key
+     *
+     * @return {void}
+     */
+    registerKeyRelease(key) {
+        this.keys[key] = false
     }
 
     /**
@@ -32,6 +41,6 @@ export default class Keyboard {
      * @return {Boolean}
      */
     waitKeyPress(callback) {
-        this.keyPressCallback = callback
+        this.onKeyPress = callback
     }
 }

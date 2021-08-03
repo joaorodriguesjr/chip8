@@ -23,11 +23,10 @@ export default class Canvas {
             const x = pixel.col * this.scale
             const y = pixel.row * this.scale
 
-            this.context.rect(x, y, this.scale, this.scale)
-
+            this.context.fillRect(x, y, this.scale, this.scale)
             continue
         }
 
-        this.context.fill()
+        return
     }
 }

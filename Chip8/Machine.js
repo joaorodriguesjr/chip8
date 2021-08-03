@@ -212,7 +212,7 @@ export default class Machine {
      * @return {void}
      */
     _8XY1(_, X, Y) {
-        this.V[X] = this.V[X] | this.V[Y]
+        this.V[X] |= this.V[Y]
         this.PC += Instruction.SIZE
     }
 
@@ -226,7 +226,7 @@ export default class Machine {
      * @return {void}
      */
     _8XY2(_, X, Y) {
-        this.V[X] = this.V[X] & this.V[Y]
+        this.V[X] &= this.V[Y]
         this.PC += Instruction.SIZE
     }
 
@@ -240,7 +240,7 @@ export default class Machine {
      * @return {void}
      */
     _8XY3(_, X, Y) {
-        this.V[X] = this.V[X] ^ this.V[Y]
+        this.V[X] ^= this.V[Y]
         this.PC += Instruction.SIZE
     }
 
@@ -254,9 +254,8 @@ export default class Machine {
      * @return {void}
      */
     _8XY4(_, X, Y) {
-        const sum = (this.V[X] += this.V[Y])
-        this.VF = (sum > 0xFF) ? 1 : 0
-        this.V[X] = sum
+        this.VF = (this.V[X] + this.V[Y] > 0xFF) ? 1 : 0
+        this.V[X] += this.V[Y]
         this.PC += Instruction.SIZE
     }
 
@@ -270,8 +269,8 @@ export default class Machine {
      * @return {void}
      */
     _8XY5(_, X, Y) {
-        this.V[X] -= this.V[Y]
         this.VF = (this.V[X] >= this.V[Y]) ? 1 : 0
+        this.V[X] = this.V[X] - this.V[Y]
         this.PC += Instruction.SIZE
     }
 
@@ -300,8 +299,8 @@ export default class Machine {
      * @return {void}
      */
     _8XY7(_, X, Y) {
+        this.VF = (this.V[Y] >= this.V[X]) ? 1 : 0
         this.V[X] = (this.V[Y] - this.V[X])
-        this.VF = (this.V[Y] > this.V[X]) ? 1 : 0
         this.PC += Instruction.SIZE
     }
 
