@@ -1,3 +1,4 @@
+import Config from './Chip8/Config.js'
 import Machine from './Chip8/Machine.js'
 import Display from './Chip8/Display.js'
 import Keyboard from './Chip8/Keyboard.js'
@@ -25,7 +26,11 @@ const start = () => {
     }
 }
 
-fetch('./roms/ibm-logo.rom')
+for (const [index, digit] of Config.digits.entries()) {
+    vm.memory[index] = digit
+}
+
+fetch('./roms/opcode.rom')
     .then(response => response.arrayBuffer())
     .then(buffer => {
         const data = new Uint8Array(buffer)

@@ -112,8 +112,8 @@ export default class Machine {
      * Returns from subroutine
      */
     _00EE() {
+        this.SP --
         this.PC = this.STACK[this.SP]
-        this.SP--
     }
 
     /**
@@ -135,7 +135,7 @@ export default class Machine {
      */
     _2NNN(NNN) {
         this.STACK[this.SP] = (this.PC + Instruction.SIZE)
-        this.SP++
+        this.SP ++
         this.PC = NNN
     }
 
@@ -256,6 +256,7 @@ export default class Machine {
     _8XY4(_, X, Y) {
         const sum = (this.V[X] += this.V[Y])
         this.VF = (sum > 0xFF) ? 1 : 0
+        this.V[X] = sum
         this.PC += Instruction.SIZE
     }
 
@@ -270,7 +271,7 @@ export default class Machine {
      */
     _8XY5(_, X, Y) {
         this.V[X] -= this.V[Y]
-        this.VF = (this.V[X] > this.V[Y]) ? 1 : 0
+        this.VF = (this.V[X] >= this.V[Y]) ? 1 : 0
         this.PC += Instruction.SIZE
     }
 
