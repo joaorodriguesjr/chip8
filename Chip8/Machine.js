@@ -35,11 +35,6 @@ export default class Machine {
         this.V = new Uint8Array(0x10)
 
         /**
-         * Alias for this.V[F] register
-         */
-        this.VF = this.V[0xF]
-
-        /**
          * 16-bit register for memory addressing
          */
         this.I = 0x0000
@@ -73,6 +68,13 @@ export default class Machine {
          * The halting state
          */
         this.HLT = false
+    }
+
+    /**
+     * @param {Number} value
+     */
+    set VF(value) {
+        this.V[0xF] = value
     }
 
     /**
@@ -390,24 +392,17 @@ export default class Machine {
         const SPRITE_WDTH = 8
         const SPRITE_HGHT = N
 
-        let row = 0
-        let col = 0
-
         const bit = (byte, col) => (byte & (Machine.MSB >> col))
 
-        while (row < SPRITE_HGHT) { const byte = this.memory[this.I + row]
-        while (col < SPRITE_WDTH) {
-
-            if (bit(byte, col)) {
-                const pixel = this.display.toggle(this.V[X] + col, this.V[Y] + row)
-                this.VF = (pixel ^ 1)
+        for (let row = 0; row < SPRITE_HGHT; row ++) { const byte = this.memory[this.I + row]
+        for (let col = 0; col < SPRITE_WDTH; col ++) {
+            if (! bit(byte, col)) {
+                continue
             }
 
-            col ++
-        }
-            col -= SPRITE_WDTH
-            row ++
-        }
+            const pixel = this.display.toggle(this.V[X] + col, this.V[Y] + row)
+            this.VF = (pixel ^ 1)
+        }}
 
         this.display.render()
         this.PC += Instruction.SIZE
@@ -546,9 +541,9 @@ export default class Machine {
      * @return {void}
      */
     _FX33(_, X) {
-        this.memory[this.I + 0] = Math.round(this.V[X] / 100)
-        this.memory[this.I + 1] = Math.round(this.V[X] % 100 / 10)
-        this.memory[this.I + 2] = Math.round(this.V[X] % 10)
+        this.memory[this.I + 0] = Math.floor(this.V[X] / 100)
+        this.memory[this.I + 1] = Math.floor(this.V[X] % 100 / 10)
+        this.memory[this.I + 2] = Math.floor(this.V[X] % 10)
 
         this.PC += Instruction.SIZE
     }

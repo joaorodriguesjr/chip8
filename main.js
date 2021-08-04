@@ -3,7 +3,8 @@ import Machine from './Chip8/Machine.js'
 import Display from './Chip8/Display.js'
 import Keyboard from './Chip8/Keyboard.js'
 import Renderer from './Renderer/Canvas.js'
-import Input from './Input/Handler.js'
+import InputHandler from './Input/Handler.js'
+import AudioPlayer from './Audio/Player.js'
 
 const DISPLAY_COLS = 64, DISPLAY_ROWS = 32
 const RENDERER_SCALE = 12
@@ -18,18 +19,37 @@ const display  = new Display(DISPLAY_COLS, DISPLAY_ROWS, renderer)
 
 const vm = new Machine(display, keyboard)
 
-const input = new Input(keyboard, document)
+const audioPlayer = new AudioPlayer()
+const inputHandler = new InputHandler(keyboard, document)
 
 const start = () => {
-    setInterval(() => vm.cycle(), 1000 / 500)
-    setInterval(() => vm.updateTimers(), 1000 / 60 )
+    audioPlayer.initialize(new AudioContext())
+
+    const cycleID = setInterval(() => {
+        try {
+            vm.cycle()
+        } catch (error) {
+            console.error(error)
+            clearInterval(cycleID)
+        }
+    }, 1000 / 500)
+
+    setInterval(() => {
+        vm.updateTimers()
+
+        if (vm.ST > 0)
+            audioPlayer.play()
+        else
+            audioPlayer.stop()
+
+    }, 1000 / 60 )
 }
 
 for (const [index, digit] of Config.digits.entries()) {
     vm.memory[index] = digit
 }
 
-fetch('./roms/opcode.rom')
+fetch('./roms/breakout.rom')
     .then(response => response.arrayBuffer())
     .then(buffer => {
         const data = new Uint8Array(buffer)
@@ -37,6 +57,9 @@ fetch('./roms/opcode.rom')
         for (const [index, byte] of data.entries()) {
             vm.memory[vm.PC + index] = byte
         }
-
-        start()
     })
+
+document.onclick = () => {
+    if (audioPlayer.context) return
+    start()
+}

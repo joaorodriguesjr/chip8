@@ -41,6 +41,10 @@ export default class Display {
      * @return {Number} The new state of the pixel
      */
     toggle(col, row) {
+        if (! this.pixels[col + (row * this.cols)]) {
+            return 1
+        }
+
         return this.pixels[col + (row * this.cols)].toggle()
     }
 
