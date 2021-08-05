@@ -89,7 +89,7 @@ export default class Interpreter {
         const LO = this.memory[this.PC + 1]
 
         const instruction = new Instruction(HI << 8 | LO)
-        instruction.call(this)
+        instruction.callback(this)
     }
 
     /**

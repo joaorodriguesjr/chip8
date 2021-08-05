@@ -3,6 +3,9 @@ import Interpreter from './Interpreter.js'
 
 export default class Instruction {
 
+    /**
+     * @type {Number} Instruction size of 2 bytes
+     */
     static SIZE = 2
 
     /**
@@ -14,20 +17,20 @@ export default class Instruction {
     }
 
     /**
-     * Calls the instruction in the machine object
+     * Calls back the interpreter at the right execution
      *
-     * @param {Interpreter} machine
+     * @param {Interpreter} interpreter
      *
      * @return {void}
      * @throws {Error} If instruction is not supported
      */
-    call(machine) {
+    callback(interpreter) {
         if (! Config.instructions.has(this.code)) {
             throw new Error(`Not supported instruction. CODE: ${this.code}`)
         }
 
-        const method = Config.instructions.get(this.code)
-        machine[method](this.data, this.x, this.y)
+        const method = interpreter[Config.instructions.get(this.code)]
+        method(this.data, this.x, this.y)
     }
 
     /**
