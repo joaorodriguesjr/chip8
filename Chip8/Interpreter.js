@@ -104,6 +104,8 @@ export default class Interpreter {
 
     /**
      * Clears the screen
+     *
+     * @return {void}
      */
     _00E0() {
         this.display.clear()
@@ -112,6 +114,8 @@ export default class Interpreter {
 
     /**
      * Returns from subroutine
+     *
+     * @return {void}
      */
     _00EE() {
         this.SP --
@@ -120,6 +124,8 @@ export default class Interpreter {
 
     /**
      * Not implemented instruction
+     *
+     * @return {void}
      */
     _0NNN(_) {
         this.PC += Instruction.SIZE
@@ -127,6 +133,10 @@ export default class Interpreter {
 
     /**
      * Jumps to address NNN
+     *
+     * @param {Number} NNN 12-bit constant
+     *
+     * @return {void}
      */
     _1NNN(NNN) {
         this.PC = NNN
@@ -134,6 +144,10 @@ export default class Interpreter {
 
     /**
      * Calls subroutine at NNN
+     *
+     * @param {Number} NNN 12-bit constant
+     *
+     * @return {void}
      */
     _2NNN(NNN) {
         this.STACK[this.SP] = (this.PC + Instruction.SIZE)
@@ -143,6 +157,11 @@ export default class Interpreter {
 
     /**
      * Skips the next instruction if VX equals NN
+     *
+     * @param {Number} NN 8-bit constant
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
      */
     _3XNN(NN, X) {
         if (this.V[X] === NN) {
@@ -156,6 +175,11 @@ export default class Interpreter {
 
     /**
      * Skips the next instruction if VX does not equal NN
+     *
+     * @param {Number} NN 8-bit constant
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
      */
     _4XNN(NN, X) {
         if (this.V[X] !== NN) {
@@ -169,6 +193,12 @@ export default class Interpreter {
 
     /**
      * Skips the next instruction if VX equals VY
+     *
+     * @param {Number} _ Always zero
+     * @param {Number} X Register identifier
+     * @param {Number} Y Register identifier
+     *
+     * @return {void}
      */
     _5XY0(_, X, Y) {
         if (this.V[X] === this.V[Y]) {
@@ -182,6 +212,11 @@ export default class Interpreter {
 
     /**
      * Sets VX to NN
+     *
+     * @param {Number} NN 8-bit constant
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
      */
     _6XNN(NN, X) {
         this.V[X] = NN
@@ -190,6 +225,11 @@ export default class Interpreter {
 
     /**
      * Adds NN to VX
+     *
+     * @param {Number} NN 8-bit constant
+     * @param {Number} X Register identifier
+     *
+     * @return {void}
      */
     _7XNN(NN, X) {
         this.V[X] += NN
@@ -198,6 +238,12 @@ export default class Interpreter {
 
     /**
      * Sets VX to the value of VY
+     *
+     * @param {Number} _ Always zero
+     * @param {Number} X Register identifier
+     * @param {Number} Y Register identifier
+     *
+     * @return {void}
      */
     _8XY0(_, X, Y) {
         this.V[X] = this.V[Y]
@@ -207,7 +253,7 @@ export default class Interpreter {
     /**
      * Sets VX to VX or VY
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      * @param {Number} Y Register identifier
      *
@@ -221,7 +267,7 @@ export default class Interpreter {
     /**
      * Sets VX to VX and VY
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      * @param {Number} Y Register identifier
      *
@@ -235,7 +281,7 @@ export default class Interpreter {
     /**
      * Sets VX to VX xor VY
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      * @param {Number} Y Register identifier
      *
@@ -249,7 +295,7 @@ export default class Interpreter {
     /**
      * Adds VY to VX. VF is set to 1 when there's a carry, and to 0 when there is not
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      * @param {Number} Y Register identifier
      *
@@ -264,7 +310,7 @@ export default class Interpreter {
     /**
      * VY is subtracted from VX. VF is set to 0 when there's a borrow, and 1 when there is not
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      * @param {Number} Y Register identifier
      *
@@ -279,7 +325,7 @@ export default class Interpreter {
     /**
      * Stores the least significant bit of VX in VF and then shifts VX to the right by 1
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      * @param {Number} Y Register identifier
      *
@@ -294,7 +340,7 @@ export default class Interpreter {
     /**
      * Sets VX to VY minus VX. VF is set to 0 when there's a borrow, and 1 when there is not
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      * @param {Number} Y Register identifier
      *
@@ -309,7 +355,7 @@ export default class Interpreter {
     /**
      * Stores the most significant bit of VX in VF and then shifts VX to the left by 1
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      * @param {Number} Y Register identifier
      *
@@ -324,7 +370,7 @@ export default class Interpreter {
     /**
      * Skips the next instruction if VX does not equal VY
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      * @param {Number} Y Register identifier
      *
@@ -411,7 +457,7 @@ export default class Interpreter {
     /**
      * Skips the next instruction if the key stored in VX is pressed
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      *
      * @return {void}
@@ -429,7 +475,7 @@ export default class Interpreter {
     /**
      * Skips the next instruction if the key stored in VX is not pressed
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      *
      * @return {void}
@@ -447,7 +493,7 @@ export default class Interpreter {
     /**
      * Sets VX to the value of the delay timer
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      *
      * @return {void}
@@ -460,7 +506,7 @@ export default class Interpreter {
     /**
      * A key press is awaited, and then stored in VX. (Blocking Operation. All instruction halted until next key event)
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      *
      * @return {void}
@@ -479,7 +525,7 @@ export default class Interpreter {
     /**
      * Sets the delay timer to VX
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      *
      * @return {void}
@@ -492,7 +538,7 @@ export default class Interpreter {
     /**
      * Sets the sound timer to VX
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      *
      * @return {void}
@@ -505,7 +551,7 @@ export default class Interpreter {
     /**
      * Adds VX to I. VF is not affected
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      *
      * @return {void}
@@ -519,7 +565,7 @@ export default class Interpreter {
      * Sets I to the location of the sprite for the character in VX.
      * Characters 0-F (in hexadecimal) are represented by a 4x5 font
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      *
      * @return {void}
@@ -535,7 +581,7 @@ export default class Interpreter {
      * (In other words, take the decimal representation of VX, place the hundreds digit in memory at
      * location in I, the tens digit at location I+1, and the ones digit at location I+2.)
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      *
      * @return {void}
@@ -552,7 +598,7 @@ export default class Interpreter {
      * Stores V0 to VX (including VX) in memory starting at address I.
      * The offset from I is increased by 1 for each value written, but I itself is left unmodified
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      *
      * @return {void}
@@ -569,7 +615,7 @@ export default class Interpreter {
      * Fills V0 to VX (including VX) with values from memory starting at address I.
      * The offset from I is increased by 1 for each value written, but I itself is left unmodified
      *
-     * @param {Number} _ Always zero parameter
+     * @param {Number} _ Always zero
      * @param {Number} X Register identifier
      *
      * @return {void}
