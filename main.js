@@ -1,10 +1,11 @@
-import Config from './Chip8/Config.js'
-import Display from './Chip8/Display.js'
-import Keyboard from './Chip8/Keyboard.js'
-import Interpreter from './Chip8/Interpreter.js'
-import CanvasRenderer from './Canvas/Renderer.js'
-import InputHandler from './Input/Handler.js'
-import AudioPlayer from './Audio/Player.js'
+import Config from './src/Chip8/Config.js'
+import Display from './src/Chip8/Display.js'
+import Keyboard from './src/Chip8/Keyboard.js'
+import Machine from './src/Chip8/Machine.js'
+import Interpreter from './src/Chip8/Interpreter.js'
+import CanvasRenderer from './src/Canvas/Renderer.js'
+import InputHandler from './src/Input/Handler.js'
+import AudioPlayer from './src/Audio/Player.js'
 
 const DISPLAY_COLS = 64, DISPLAY_ROWS = 32
 const RENDERER_SCALE = 12
@@ -16,7 +17,8 @@ canvas.height = DISPLAY_ROWS * RENDERER_SCALE
 const canvasRenderer = new CanvasRenderer(canvas, RENDERER_SCALE)
 const display  = new Display(DISPLAY_COLS, DISPLAY_ROWS, canvasRenderer)
 const keyboard = new Keyboard()
-const interpreter = new Interpreter(display, keyboard)
+const interpreter = new Interpreter()
+const machine = new Machine(display, keyboard, interpreter)
 const audioPlayer = new AudioPlayer()
 const inputHandler = new InputHandler(keyboard, document)
 
@@ -25,7 +27,7 @@ const start = () => {
 
     const cycleID = setInterval(() => {
         try {
-            interpreter.cycle()
+            machine.cycle()
         } catch (error) {
             console.error(error)
             clearInterval(cycleID)
@@ -33,9 +35,9 @@ const start = () => {
     }, 1000 / 500)
 
     setInterval(() => {
-        interpreter.updateTimers()
+        machine.updateTimers()
 
-        if (interpreter.ST > 0)
+        if (machine.ST > 0)
             audioPlayer.play()
         else
             audioPlayer.stop()
@@ -44,16 +46,16 @@ const start = () => {
 }
 
 for (const [index, digit] of Config.digits.entries()) {
-    interpreter.memory[index] = digit
+    machine.memory[index] = digit
 }
 
-fetch('./roms/breakout.rom')
+fetch('./roms/pong.rom')
     .then(response => response.arrayBuffer())
     .then(buffer => {
         const data = new Uint8Array(buffer)
 
         for (const [index, byte] of data.entries()) {
-            interpreter.memory[interpreter.PC + index] = byte
+            machine.memory[machine.PC + index] = byte
         }
     })
 
