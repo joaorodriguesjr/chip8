@@ -1,8 +1,8 @@
 import Config from './Chip8/Config.js'
-import Machine from './Chip8/Machine.js'
 import Display from './Chip8/Display.js'
 import Keyboard from './Chip8/Keyboard.js'
-import Renderer from './Renderer/Canvas.js'
+import Interpreter from './Chip8/Interpreter.js'
+import CanvasRenderer from './Canvas/Renderer.js'
 import InputHandler from './Input/Handler.js'
 import AudioPlayer from './Audio/Player.js'
 
@@ -13,12 +13,10 @@ const canvas  = document.querySelector('#display-canvas')
 canvas.width  = DISPLAY_COLS * RENDERER_SCALE
 canvas.height = DISPLAY_ROWS * RENDERER_SCALE
 
+const canvasRenderer = new CanvasRenderer(canvas, RENDERER_SCALE)
+const display  = new Display(DISPLAY_COLS, DISPLAY_ROWS, canvasRenderer)
 const keyboard = new Keyboard()
-const renderer = new Renderer(canvas, RENDERER_SCALE)
-const display  = new Display(DISPLAY_COLS, DISPLAY_ROWS, renderer)
-
-const vm = new Machine(display, keyboard)
-
+const interpreter = new Interpreter(display, keyboard)
 const audioPlayer = new AudioPlayer()
 const inputHandler = new InputHandler(keyboard, document)
 
@@ -27,7 +25,7 @@ const start = () => {
 
     const cycleID = setInterval(() => {
         try {
-            vm.cycle()
+            interpreter.cycle()
         } catch (error) {
             console.error(error)
             clearInterval(cycleID)
@@ -35,9 +33,9 @@ const start = () => {
     }, 1000 / 500)
 
     setInterval(() => {
-        vm.updateTimers()
+        interpreter.updateTimers()
 
-        if (vm.ST > 0)
+        if (interpreter.ST > 0)
             audioPlayer.play()
         else
             audioPlayer.stop()
@@ -46,7 +44,7 @@ const start = () => {
 }
 
 for (const [index, digit] of Config.digits.entries()) {
-    vm.memory[index] = digit
+    interpreter.memory[index] = digit
 }
 
 fetch('./roms/breakout.rom')
@@ -55,7 +53,7 @@ fetch('./roms/breakout.rom')
         const data = new Uint8Array(buffer)
 
         for (const [index, byte] of data.entries()) {
-            vm.memory[vm.PC + index] = byte
+            interpreter.memory[interpreter.PC + index] = byte
         }
     })
 

@@ -2,7 +2,7 @@ import Display from './Display.js'
 import Keyboard from './Keyboard.js'
 import Instruction from './Instruction.js'
 
-export default class Machine {
+export default class Interpreter {
 
     /**
      * Alias for (0b10000000 | 0x80 | 128) the
@@ -286,7 +286,7 @@ export default class Machine {
      * @return {void}
      */
     _8XY6(_, X, Y) {
-        this.VF = this.V[X] & Machine.LSB
+        this.VF = this.V[X] & Interpreter.LSB
         this.V[X] >>= 1
         this.PC += Instruction.SIZE
     }
@@ -316,7 +316,7 @@ export default class Machine {
      * @return {void}
      */
     _8XYE(_, X, Y) {
-        this.VF = this.V[X] & Machine.MSB
+        this.VF = this.V[X] & Interpreter.MSB
         this.V[X] <<= 1
         this.PC += Instruction.SIZE
     }
@@ -392,7 +392,7 @@ export default class Machine {
         const SPRITE_WDTH = 8
         const SPRITE_HGHT = N
 
-        const bit = (byte, col) => (byte & (Machine.MSB >> col))
+        const bit = (byte, col) => (byte & (Interpreter.MSB >> col))
 
         for (let row = 0; row < SPRITE_HGHT; row ++) { const byte = this.memory[this.I + row]
         for (let col = 0; col < SPRITE_WDTH; col ++) {

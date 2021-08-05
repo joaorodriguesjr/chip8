@@ -1,6 +1,6 @@
 import Display from '../Chip8/Display.js'
 
-export default class Canvas {
+export default class Renderer {
     /**
      * @param {HTMLCanvasElement} canvas
      * @param {Number} scale

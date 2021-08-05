@@ -1,5 +1,5 @@
 import Config from './Config.js'
-import Machine from './Machine.js'
+import Interpreter from './Interpreter.js'
 
 export default class Instruction {
 
@@ -16,7 +16,7 @@ export default class Instruction {
     /**
      * Calls the instruction in the machine object
      *
-     * @param {Machine} machine
+     * @param {Interpreter} machine
      *
      * @return {void}
      * @throws {Error} If instruction is not supported
