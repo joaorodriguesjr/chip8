@@ -11,7 +11,7 @@ export default class _FX55 extends Instruction {
      */
     execute(machine) {
         for (let offset = 0; offset <= this.X; offset ++) {
-            machine.memory[machine.I + offset] = machine.V[offset]
+            machine.memory.read(machine.I + offset) = machine.V[offset]
         }
 
         return true

@@ -1,4 +1,4 @@
-export default class Player {
+export default class AudioPlayer {
     initialize(context) {
         this.playing = false
         this.context = context

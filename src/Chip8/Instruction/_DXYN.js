@@ -15,7 +15,7 @@ export default class _DXYN extends Instruction {
 
         const bit = (byte, col) => (byte & (0b10000000 >> col))
 
-        for (let row = 0; row < SPRITE_HGHT; row ++) { const byte = machine.memory[machine.I + row]
+        for (let row = 0; row < SPRITE_HGHT; row ++) { const byte = machine.memory.read(machine.I + row)
         for (let col = 0; col < SPRITE_WDTH; col ++) {
             if (! bit(byte, col)) {
                 continue

@@ -10,9 +10,9 @@ export default class _FX33 extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.memory[machine.I + 0] = Math.floor(machine.V[this.X] / 100)
-        machine.memory[machine.I + 1] = Math.floor(machine.V[this.X] % 100 / 10)
-        machine.memory[machine.I + 2] = Math.floor(machine.V[this.X] % 10)
+        machine.memory.write(machine.I + 0, Math.floor(machine.V[this.X] / 100     ))
+        machine.memory.write(machine.I + 1, Math.floor(machine.V[this.X] % 100 / 10))
+        machine.memory.write(machine.I + 2, Math.floor(machine.V[this.X] % 10      ))
 
         return true
     }

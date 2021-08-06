@@ -1,6 +1,6 @@
 import Keyboard from '../Chip8/Keyboard.js'
 
-export default class Handler {
+export default class InputHandler {
     /**
      * @param {Keyboard} keyboard
      * @param {HTMLDocument} docuemnt

@@ -1,3 +1,5 @@
+import Events from './Events.js'
+import Memory from './Memory.js'
 import Display from './Display.js'
 import Keyboard from './Keyboard.js'
 import Interpreter from './Interpreter.js'
@@ -5,19 +7,18 @@ import Interpreter from './Interpreter.js'
 export default class Machine {
 
     /**
+     * @param {Events} events
+     * @param {Memory} memory
      * @param {Display} display
      * @param {Keyboard} keyboard
      * @param {Interpreter} interpreter
      */
-    constructor(display, keyboard, interpreter) {
+    constructor(interpreter, memory, display, keyboard, events) {
+        this.events = events
+        this.memory = memory
         this.display = display
         this.keyboard = keyboard
         this.interpreter = interpreter
-
-        /**
-         * 4096 bytes of addressable memory
-         */
-        this.memory = new Uint8Array(0x1000)
 
         /**
          * 16 general purpose 8-bit registers
@@ -68,6 +69,20 @@ export default class Machine {
     }
 
     /**
+     * Loads a buffer into memory at the program space
+     *
+     * @param {ArrayBuffer} buffer The buffer data to be loaded
+     * @returns {void} No return operation
+     */
+    load(buffer) {
+        const data = new Uint8Array(buffer)
+
+        for (const [address, byte] of data.entries()) {
+            this.memory.write(this.PC + address, byte)
+        }
+    }
+
+    /**
      * Executes a machine cycle
      *
      * @return {void}
@@ -75,8 +90,8 @@ export default class Machine {
     cycle() {
         if (this.HLT) return
 
-        const HI = this.memory[this.PC + 0]
-        const LO = this.memory[this.PC + 1]
+        const HI = this.memory.read(this.PC + 0)
+        const LO = this.memory.read(this.PC + 1)
 
         const instruction = this.interpreter.interpret(HI << 8 | LO)
         const increment = instruction.execute(this)
@@ -92,5 +107,10 @@ export default class Machine {
     updateTimers() {
         if (this.ST > 0) this.ST --
         if (this.DT > 0) this.DT --
+
+        if (this.ST > 0)
+            this.events.trigger('SOUND_PLAY')
+        else
+            this.events.trigger('SOUND_STOP')
     }
 }

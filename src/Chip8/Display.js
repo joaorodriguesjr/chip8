@@ -1,12 +1,8 @@
 export default class Display {
-    /**
-     * @param {Number} cols
-     * @param {Number} rows
-     */
-    constructor(cols, rows, renderer) {
-        this.renderer = renderer
-        this.cols = cols
-        this.rows = rows
+
+    constructor() {
+        this.cols = 64
+        this.rows = 32
 
         this.initialize()
     }

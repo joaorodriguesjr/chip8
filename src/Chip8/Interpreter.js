@@ -98,7 +98,7 @@ export default class Interpreter {
             throw new Error(`No supported instruction for: ${hex(data)}`)
         }
 
-        const constructor = instructions.get(code)
-        return new constructor(data)
+        const Constructor = instructions.get(code)
+        return new Constructor(data)
     }
 }
