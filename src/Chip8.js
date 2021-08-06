@@ -15,23 +15,27 @@ export default class Chip8 {
     constructor(machine, peripherals) {
         this.machine = machine
         this.peripherals = peripherals
+        this.intervals = { cycles: null, timers: null }
 
-        peripherals.listen(machine.events)
+        this.running = false
     }
 
     start() {
+        if (this.running) this.stop()
+
         this.peripherals.audioPlayer.initialize(new AudioContext())
+        this.peripherals.listen(this.machine.events)
+        this.intervals.cycles = setInterval(() => this.machine.cycle()       , 1000 / 500)
+        this.intervals.timers = setInterval(() => this.machine.updateTimers(), 1000 / 60 )
 
-        const cycles = setInterval(() => {
-            try {
-                this.machine.cycle()
-            } catch (error) {
-                console.error(error)
-                clearInterval(cycles)
-            }
-        }, 1000 / 500)
+        this.running = true
+    }
 
-        setInterval(() => this.machine.updateTimers(), 1000 / 60 )
+    stop() {
+        clearInterval(this.intervals.cycles)
+        clearInterval(this.intervals.timers)
+
+        this.running = false
     }
 
     /**

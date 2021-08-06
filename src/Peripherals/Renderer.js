@@ -7,7 +7,7 @@ export default class Renderer {
      */
     constructor(canvas, scale) {
         this.context = canvas.getContext('2d')
-        this.context.fillStyle = '#555555'
+        this.context.fillStyle = '#33ff66'
         this.scale = scale
     }
 
