@@ -59,8 +59,8 @@ export default class Memory {
             0xF0, 0x80, 0xF0, 0x80, 0x80, /* F */
         ]
 
-        for (const [address, digit] of digits.entries()) {
-            memory.write(address, digit)
+        for (const [address, byte] of digits.entries()) {
+            memory.write(address, byte)
         }
 
         return memory
