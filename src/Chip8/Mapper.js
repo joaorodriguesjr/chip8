@@ -441,7 +441,7 @@ class _FX1E extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.I = machine.V[this.X]
+        machine.I += machine.V[this.X]
         return true
     }
 }
