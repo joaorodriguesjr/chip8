@@ -10,8 +10,7 @@ export default class _00EE extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.SP --
-        machine.PC = machine.STACK[machine.SP]
+        machine.returnSubroutine()
         return false
     }
 }

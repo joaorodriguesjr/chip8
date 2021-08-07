@@ -10,10 +10,7 @@ export default class _2NNN extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.STACK[machine.SP] = (machine.PC + 2)
-        machine.SP ++
-        machine.PC = this.NNN
-
+        machine.callSubroutine(this.NNN)
         return false
     }
 }

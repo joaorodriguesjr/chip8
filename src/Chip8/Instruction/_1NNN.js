@@ -10,7 +10,7 @@ export default class _1NNN extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.PC = this.NNN
+        machine.jump(this.NNN)
         return false
     }
 }

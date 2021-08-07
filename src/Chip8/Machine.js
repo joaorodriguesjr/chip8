@@ -113,4 +113,36 @@ export default class Machine {
         else
             this.events.trigger('SOUND_STOP')
     }
+
+     /**
+     * Jumps to a specific memory address
+     *
+     * @param {Number} address 12-bit memory address to jump to
+     * @returns {void} No return operation
+     */
+    jump(address) {
+        this.PC = address
+    }
+
+    /**
+     * Calls a subroutine at a specific memory address
+     *
+     * @param {Number} address 12-bit memory address to call the subroutine
+     * @returns {void} No return operation
+     */
+    callSubroutine(address) {
+        this.STACK[this.SP] = (this.PC + 2)
+        this.SP ++
+        this.PC = address
+    }
+
+    /**
+     * Returns from subroutine to the return point stored in the stack
+     *
+     * @returns {void} No return operation
+     */
+    returnSubroutine() {
+        this.SP --
+        this.PC = this.STACK[this.SP]
+    }
 }
