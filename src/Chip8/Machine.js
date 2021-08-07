@@ -92,8 +92,9 @@ export default class Machine {
 
         const HI = this.memory.read(this.PC + 0)
         const LO = this.memory.read(this.PC + 1)
+        const word = (HI << 8 | LO)
 
-        const instruction = this.interpreter.interpret(HI << 8 | LO)
+        const instruction = this.interpreter.interpret(word)
         const increment = instruction.execute(this)
 
         if (increment) this.PC += 2

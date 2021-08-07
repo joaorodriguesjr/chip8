@@ -1,12 +1,21 @@
 import Machine from './Machine.js'
 
+/**
+ * Represents a Chip-8 instruction.
+ * Holds the current word (a 16-bit value) providing the access methods for its possible parameters like:
+ *  - X (4-bit register identifier)
+ *  - Y (4-bit register identifier)
+ *  - N (4-bit value)
+ *  - NN (8-bit value)
+ *  - NNN (12-bit value)
+ */
 export default class Instruction {
 
     /**
-     * @param {Number} value
+     * @param {Number} data
      */
-    constructor(value) {
-        this.value = value
+    constructor(data) {
+        this.data = data
     }
 
     /**
@@ -25,7 +34,7 @@ export default class Instruction {
      * @return {Number}
      */
     extract(mask = 0xFFFF) {
-        return this.value & mask
+        return this.data & mask
     }
 
     /**

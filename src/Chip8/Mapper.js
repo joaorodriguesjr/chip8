@@ -507,14 +507,13 @@ class _FX65 extends Instruction {
     }
 }
 
-export default class InstructionMap {
+/**
+ * Represents the Chip-8 instructions mapper.
+ * Holds the machine instructions mapping providing its access methods.
+ */
+export default class Mapper {
     /**
-     * N-- : 4-bit constant
-     * NN- : 8-bit constant
-     * NNN : Full address
-     *
-     * X : 4-bit register identifier
-     * Y : 4-bit register identifier
+     * The instructions mapping from opcode to instruction constructor
      *
      * @type {Map<Number, Function>}
      */
@@ -532,6 +531,8 @@ export default class InstructionMap {
     ])
 
     /**
+     * The masks mapping from opcode group to opcode mask
+     *
      * @type {Map<Number, Number>}
      */
     static masks = new Map([
@@ -540,4 +541,34 @@ export default class InstructionMap {
         [0x8000, 0xF00F], [0x9000, 0xF000], [0xA000, 0xF000], [0xB000, 0xF000],
         [0xC000, 0xF000], [0xD000, 0xF000], [0xE000, 0xF0FF], [0xF000, 0xF0FF],
     ])
+
+    /**
+     * Extracts the opcode of a 16-bit word
+     *
+     * @param {Number} word 16-bit word
+     * @returns {Number} The extracted opcode
+     */
+    static opcode(word) {
+        return word & this.masks.get(word & 0xF000)
+    }
+
+    /**
+     * Evaluates the existence of a mapping between a word and a valid instruction
+     *
+     * @param {Number} word 16-bit word
+     * @returns {Boolean} The mapping evaluation
+     */
+    static hasMapping(word) {
+        return this.instructions.has(this.opcode(word))
+    }
+
+    /**
+     * Provides a mapping between a word and a valid instruction
+     *
+     * @param {Number} word 16-bit word
+     * @returns {Function} The instruction constructor
+     */
+    static getMapping(word) {
+        return this.instructions.get(this.opcode(word))
+    }
 }
