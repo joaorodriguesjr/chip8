@@ -10,7 +10,7 @@ export default class _6XNN extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.V[this.X] = this.NN
+        machine.define(this.X, this.NN)
         return true
     }
 }

@@ -145,4 +145,112 @@ export default class Machine {
         this.SP --
         this.PC = this.STACK[this.SP]
     }
+
+    /**
+     * Skips next instruction if register VX is equals the provided value
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} value 8-bit value to compare
+     * @returns {void} No return operation
+     */
+    skipEquals(X, value) {
+        if (this.V[X] === value)
+            this.PC += 4
+        else
+            this.PC += 2
+    }
+
+    /**
+     * Skips next instruction if register VX is not equals the provided value
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} value 8-bit value to compare
+     * @returns {void} No return operation
+     */
+    skipNotEquals(X, value) {
+        if (this.V[X] !== value)
+            this.PC += 4
+        else
+            this.PC += 2
+    }
+
+    /**
+     * Skips next instruction if register VX is equals to register VY
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} Y 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    skipEquals_XY(X, Y) {
+        if (this.V[X] === this.V[Y])
+            this.PC += 4
+        else
+            this.PC += 2
+    }
+
+    /**
+     * Defines register VX with the provided value
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} value 8-bit value
+     * @returns {void} No return operation
+     */
+    define(X, value) {
+        this.V[X] = value
+    }
+
+    /**
+     * Increments register VX with the provided value
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} value 8-bit value
+     * @returns {void} No return operation
+     */
+    increment(X, value) {
+        this.V[X] += value
+    }
+
+    /**
+     * Defines register VX with the value of register VY
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} Y 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    define_XY(X, Y) {
+        this.V[X] = this.V[Y]
+    }
+
+    /**
+     * Defines register VX with the value of a bitwise OR operation between registers VX and VY
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} Y 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    or_XY(X, Y) {
+        this.V[X] |= this.V[Y]
+    }
+
+    /**
+     * Defines register VX with the value of a bitwise AND operation between registers VX and VY
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} Y 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    and_XY(X, Y) {
+        this.V[X] &= this.V[Y]
+    }
+
+    /**
+     * Defines register VX with the value of a bitwise XOR operation between registers VX and VY
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} Y 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    xor_XY(X, Y) {
+        this.V[X] ^= this.V[Y]
+    }
 }

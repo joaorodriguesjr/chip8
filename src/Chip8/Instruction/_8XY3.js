@@ -10,7 +10,7 @@ export default class _8XY3 extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.V[this.X] ^= machine.V[this.Y]
+        machine.xor_XY(this.X, this.Y)
         return true
     }
 }

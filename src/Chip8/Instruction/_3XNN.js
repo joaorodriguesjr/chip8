@@ -10,12 +10,7 @@ export default class _3XNN extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        if (machine.V[this.X] === this.NN) {
-            machine.PC += 4
-
-            return false
-        }
-
-        return true
+        machine.skipEquals(this.X, this.NN)
+        return false
     }
 }
