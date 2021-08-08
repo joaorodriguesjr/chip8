@@ -190,8 +190,7 @@ class _8XY4 extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.VF = (machine.V[this.X] + machine.V[this.Y] > 0xFF) ? 1 : 0
-        machine.V[this.X] += machine.V[this.Y]
+        machine.increment_XY(this.X, this.Y)
         return true
     }
 }
@@ -204,8 +203,7 @@ class _8XY5 extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.VF = (machine.V[this.X] >= machine.V[this.Y]) ? 1 : 0
-        machine.V[this.X] -= machine.V[this.Y]
+        machine.decrement_XY(this.X, this.Y)
         return true
     }
 }
@@ -218,8 +216,7 @@ class _8XY6 extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.VF = machine.V[this.X] & 0b00000001
-        machine.V[this.X] >>= 1
+        machine.shift_XR(this.X)
         return true
     }
 }
@@ -232,8 +229,7 @@ class _8XY7 extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.VF = (machine.V[this.Y] >= machine.V[this.X]) ? 1 : 0
-        machine.V[this.X] = (machine.V[this.Y] - machine.V[this.X])
+        machine.subtract_YX(this.Y, this.X)
         return true
     }
 }
@@ -246,8 +242,7 @@ class _8XYE extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.VF = machine.V[this.X] & 0b10000000
-        machine.V[this.X] <<= 1
+        machine.shift_XL(this.X)
         return true
     }
 }

@@ -254,4 +254,65 @@ export default class Machine {
     xor_XY(X, Y) {
         this.V[X] ^= this.V[Y]
     }
+
+    /**
+     * Increments register VX with the value of register VY.
+     * Defines VF to 1 if there's a carry, and to 0 if not
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} Y 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    increment_XY(X, Y) {
+        this.VF = (this.V[X] + this.V[Y] > 255) ? 1 : 0
+        this.V[X] += this.V[Y]
+    }
+
+    /**
+     * Decrements register VX with the value of register VY.
+     * Defines VF to 0 if there's a borrow, and to 1 if not
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} Y 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    decrement_XY(X, Y) {
+        this.VF = (this.V[X] >= this.V[Y]) ? 1 : 0
+        this.V[X] -= this.V[Y]
+    }
+
+    /**
+     * Stores the least significant bit of VX in VF and then shifts VX to the right by 1
+     *
+     * @param {Number} X 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    shift_XR(X) {
+        this.VF = this.V[X] & 0b00000001
+        this.V[X] >>= 1
+    }
+
+    /**
+     * Subtracts the value of register VX off the value of register VY and stores the result in register VX.
+     * Defines VF to 0 if there's a borrow, and to 1 if not
+     *
+     * @param {Number} Y 4-bit register identifier
+     * @param {Number} X 4-bit register identifier
+     * @returns {void} No return operation
+     */
+     subtract_YX(Y, X) {
+        this.VF = (this.V[Y] >= this.V[X]) ? 1 : 0
+        this.V[X] = (this.V[Y] - this.V[X])
+    }
+
+    /**
+     * Stores the most significant bit of VX in VF and then shifts VX to the left by 1
+     *
+     * @param {Number} X 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    shift_XL(X) {
+        this.VF = this.V[X] & 0b10000000
+        this.V[X] <<= 1
+    }
 }
