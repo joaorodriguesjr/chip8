@@ -33,6 +33,10 @@ export default class Memory {
         this.data[address] = data
     }
 
+    clear() {
+        this.data.fill(0, 512)
+    }
+
     /**
      * Creates a memory of 4096 bytes of capacity with the Chip-8 digits written in it
      *

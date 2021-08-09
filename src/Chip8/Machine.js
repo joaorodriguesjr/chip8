@@ -20,6 +20,15 @@ export default class Machine {
         this.keyboard = keyboard
         this.interpreter = interpreter
 
+        this.initialize()
+    }
+
+    /**
+     * Initializes the virtual machine state
+     *
+     * @returns {void} No return operation
+     */
+    initialize() {
         /**
          * 16 general purpose 8-bit registers
          */
@@ -62,7 +71,20 @@ export default class Machine {
     }
 
     /**
+     * Resets the virtual machine entire state
+     *
+     * @returns {void} No return operation
+     */
+    reset() {
+        this.initialize()
+        this.display.clear()
+    }
+
+    /**
+     * Alias to register VF
+     *
      * @param {Number} value
+     * @returns {void} No return operation
      */
     set VF(value) {
         this.V[0xF] = value
@@ -75,6 +97,7 @@ export default class Machine {
      * @returns {void} No return operation
      */
     load(buffer) {
+        this.memory.clear()
         const data = new Uint8Array(buffer)
 
         for (const [address, byte] of data.entries()) {

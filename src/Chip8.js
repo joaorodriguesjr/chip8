@@ -21,12 +21,12 @@ export default class Chip8 {
     }
 
     start() {
-        if (this.running) this.stop()
+        if (this.running) return
 
         this.peripherals.audioPlayer.initialize(new AudioContext())
         this.peripherals.listen(this.machine.events)
-        this.intervals.cycles = setInterval(() => this.machine.cycle()       , 1000 / 500)
-        this.intervals.timers = setInterval(() => this.machine.updateTimers(), 1000 / 60 )
+        this.intervals.cycles = setInterval(() => this.machine.cycle()       , 2.0)
+        this.intervals.timers = setInterval(() => this.machine.updateTimers(), 16.666 )
 
         this.running = true
     }
@@ -36,6 +36,14 @@ export default class Chip8 {
         clearInterval(this.intervals.timers)
 
         this.running = false
+    }
+
+    reset() {
+        if (! this.running) return
+
+        this.stop()
+        this.machine.reset()
+        this.start()
     }
 
     /**
