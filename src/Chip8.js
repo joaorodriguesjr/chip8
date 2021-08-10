@@ -31,7 +31,16 @@ export default class Chip8 {
         this.running = true
     }
 
+    power() {
+        if (this.running)
+            this.stop()
+        else
+            this.start()
+    }
+
     stop() {
+        this.machine.display.clear()
+        this.machine.reset()
         clearInterval(this.intervals.cycles)
         clearInterval(this.intervals.timers)
 

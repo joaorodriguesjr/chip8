@@ -1,9 +1,28 @@
 import Chip8 from './src/Chip8.js'
 
 const chip8 = Chip8.create()
-document.querySelector('#start').onclick = () => chip8.start()
+document.querySelector('#power').onclick = () => {
+    const indicator = document.querySelector('.indicator')
+
+    if (chip8.running)
+        indicator.classList.remove('on')
+    else
+        indicator.classList.add('on')
+
+    chip8.power()
+}
 document.querySelector('#reset').onclick = () => chip8.reset()
 
+
+window.onresize = (event) => {
+    const canvas = document.querySelector('.canvas')
+    const scale = Math.round(window.innerWidth / 64) - 1
+    canvas.width = scale * 64
+    canvas.height = scale * 32
+    chip8.peripherals.renderer.scale = scale
+    chip8.peripherals.renderer.context.fillStyle = '#33ff66'
+    chip8.machine.display.render()
+}
 
 fetch(`/roms/Chip8 emulator Logo [Garstyciuks].ch8`)
     .then(response => response.arrayBuffer())
@@ -11,6 +30,7 @@ fetch(`/roms/Chip8 emulator Logo [Garstyciuks].ch8`)
         chip8.machine.reset()
         chip8.machine.load(buffer)
         chip8.start()
+        document.querySelector('.indicator').classList.add('on')
     })
 
 fetch(`/roms/list.json`)
@@ -32,6 +52,11 @@ fetch(`/roms/list.json`)
             label.appendChild(span)
 
             parent.appendChild(label)
+
+            if (rom.file === 'Chip8 emulator Logo [Garstyciuks].ch8') {
+                parent.scroll(0, label.offsetTop)
+                input.checked = true
+            }
         }
 
         const radios = document.querySelectorAll('input[name="rom"]')
