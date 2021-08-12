@@ -255,13 +255,8 @@ class _9XY0 extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        if (machine.V[this.X] !== machine.V[this.Y]) {
-            machine.PC += 4
-
-            return false
-        }
-
-        return true
+        machine.skipNotEquals_XY(this.X, this.Y)
+        return false
     }
 }
 

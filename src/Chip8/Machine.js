@@ -338,4 +338,18 @@ export default class Machine {
         this.VF = this.V[X] & 0b10000000
         this.V[X] <<= 1
     }
+
+    /**
+     * Skips next instruction if register VX is not equals to register VY
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} Y 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    skipNotEquals_XY(X, Y) {
+        if (this.V[X] !== this.V[Y])
+            this.PC += 4
+        else
+            this.PC += 2
+    }
 }
