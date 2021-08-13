@@ -352,4 +352,24 @@ export default class Machine {
         else
             this.PC += 2
     }
+
+    /**
+     * Defines register I with the provided value
+     *
+     * @param {Number} value 12-bit value
+     * @returns {void} No return operation
+     */
+    define_I(value) {
+        this.I = value
+    }
+
+    /**
+    * Jumps to address plus V0
+    *
+    * @param {Number} address 12-bit memory address to jump to
+    * @returns {void} No return operation
+    */
+   jump_V0(address) {
+        this.PC = address + this.V[0]
+   }
 }

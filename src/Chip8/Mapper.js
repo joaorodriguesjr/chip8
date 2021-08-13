@@ -268,7 +268,7 @@ class _ANNN extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.I = this.NNN
+        machine.define_I(this.NNN)
         return true
     }
 }
@@ -281,7 +281,7 @@ class _BNNN extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.PC = this.NNN + machine.V[0]
+        machine.jump_V0(this.NNN)
         return false
     }
 }
