@@ -294,8 +294,7 @@ class _CXNN extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        const random = Math.floor(Math.random() * 0xFF)
-        machine.V[this.X] = random & this.NN
+        machine.rand(this.X, this.NN)
         return true
     }
 }

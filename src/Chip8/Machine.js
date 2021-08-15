@@ -369,7 +369,19 @@ export default class Machine {
     * @param {Number} address 12-bit memory address to jump to
     * @returns {void} No return operation
     */
-   jump_V0(address) {
+    jump_V0(address) {
         this.PC = address + this.V[0]
-   }
+    }
+
+    /**
+     * Defines register VX with the result of a bitwise and operation
+     * on a random number and an 8-bit value
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} value 8-bit value
+     * @returns {void} No return operation
+     */
+    rand(X, value) {
+        this.V[X] = Math.floor(Math.random() * 0xFF) & value
+    }
 }
