@@ -307,23 +307,7 @@ class _DXYN extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        const SPRITE_WDTH = 8
-        const SPRITE_HGHT = this.N
-
-        const bit = (byte, col) => (byte & (0b10000000 >> col))
-
-        for (let row = 0; row < SPRITE_HGHT; row ++) { const byte = machine.memory.read(machine.I + row)
-        for (let col = 0; col < SPRITE_WDTH; col ++) {
-            if (! bit(byte, col)) {
-                continue
-            }
-
-            const pixel = machine.display.toggle(machine.V[this.X] + col, machine.V[this.Y] + row)
-            machine.VF = (pixel ^ 1)
-        }}
-
-        machine.display.render()
-
+        machine.draw(this.X, this.Y, this.N)
         return true
     }
 }

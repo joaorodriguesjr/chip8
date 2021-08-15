@@ -384,4 +384,34 @@ export default class Machine {
     rand(X, value) {
         this.V[X] = Math.floor(Math.random() * 0xFF) & value
     }
+
+    /**
+     * Draws a sprite at coordinate (VX, VY) that has a width of 8 pixels and
+     * a height of N pixels. Each row of 8 pixels is read as bit-coded starting from memory location I;
+     * I value does not change after the execution of this instruction. As described above,
+     * VF is set to 1 if any screen pixels are flipped from set to unset when the sprite is drawn, and to 0 if that does not happen
+     *
+     * @param {Number} X 4-bit register identifier
+     * @param {Number} Y 4-bit register identifier
+     * @param {Number} height 4-bit value
+     * @returns {void} No return operation
+     */
+    draw(X, Y, height) {
+        const SPRITE_WDTH = 8
+        const SPRITE_HGHT = height
+
+        const bit = (byte, col) => (byte & (0b10000000 >> col))
+
+        for (let row = 0; row < SPRITE_HGHT; row ++) { const byte = this.memory.read(this.I + row)
+        for (let col = 0; col < SPRITE_WDTH; col ++) {
+            if (! bit(byte, col)) {
+                continue
+            }
+
+            const pixel = this.display.toggle(this.V[X] + col, this.V[Y] + row)
+            this.VF = (pixel ^ 1)
+        }}
+
+        this.display.render()
+    }
 }
