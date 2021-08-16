@@ -414,4 +414,30 @@ export default class Machine {
 
         this.display.render()
     }
+
+    /**
+     * Skips the next instruction if the key stored in VX is pressed
+     *
+     * @param {Number} X 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    skipKeyPressed(X) {
+        if (this.keyboard.isPressed(this.V[X]))
+            this.PC += 4
+        else
+            this.PC += 2
+    }
+
+    /**
+     * Skips the next instruction if the key stored in VX is not pressed
+     *
+     * @param {Number} X 4-bit register identifier
+     * @returns {void} No return operation
+     */
+     skipKeyNotPressed(X) {
+        if (! this.keyboard.isPressed(this.V[X]))
+            this.PC += 4
+        else
+            this.PC += 2
+    }
 }

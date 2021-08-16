@@ -320,13 +320,8 @@ class _EX9E extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        if (machine.keyboard.isPressed(machine.V[this.X])) {
-            machine.PC += 4
-
-            return false
-        }
-
-        return true
+        machine.skipKeyPressed(this.X)
+        return false
     }
 }
 
@@ -338,13 +333,8 @@ class _EXA1 extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        if (! machine.keyboard.isPressed(machine.V[this.X])) {
-            machine.PC += 4
-
-            return false
-        }
-
-        return true
+        machine.skipKeyNotPressed(this.X)
+        return false
     }
 }
 
