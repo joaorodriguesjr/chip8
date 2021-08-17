@@ -440,4 +440,14 @@ export default class Machine {
         else
             this.PC += 2
     }
+
+    /**
+     * Defines register VX with the value of the delay timer register
+     *
+     * @param {Number} X 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    define_DT(X) {
+        this.V[X] = this.DT
+    }
 }

@@ -346,7 +346,7 @@ class _FX07 extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.V[this.X] = machine.DT
+        machine.define_DT(this.X)
         return true
     }
 }
