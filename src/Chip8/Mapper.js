@@ -346,7 +346,7 @@ class _FX07 extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.define_DT(this.X)
+        machine.define_XDT(this.X)
         return true
     }
 }
@@ -359,13 +359,7 @@ class _FX0A extends Instruction {
      * @returns {Boolean} The need of a program counter increment
      */
     execute(machine) {
-        machine.HLT = true
-
-        const onKeyPress = (key) => { machine.HLT = false
-            machine.V[this.X] = key
-        }
-
-        machine.keyboard.waitKeyPress(onKeyPress)
+        machine.awaitKeyPress(this.X)
         return true
     }
 }

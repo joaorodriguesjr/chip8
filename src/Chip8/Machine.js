@@ -447,7 +447,24 @@ export default class Machine {
      * @param {Number} X 4-bit register identifier
      * @returns {void} No return operation
      */
-    define_DT(X) {
+    define_XDT(X) {
         this.V[X] = this.DT
+    }
+
+    /**
+     * A key press is awaited, and then stored in VX.
+     * (Blocking Operation. All instruction halted until next key event)
+     *
+     * @param {Number} X 4-bit register identifier
+     * @returns {void} No return operation
+     */
+    awaitKeyPress(X) {
+        this.HLT = true
+
+        const onKeyPress = (key) => { this.HLT = false
+            this.V[X] = key
+        }
+
+        this.keyboard.waitKeyPress(onKeyPress)
     }
 }
