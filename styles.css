@@ -46,6 +46,10 @@ canvas {
 }
 
 .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 250px;
     margin: 32px 16px;
 }
 
