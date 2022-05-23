@@ -55,9 +55,9 @@ canvas {
 .buttons {
     display: flex;
     align-items: center;
-    justify-content: center;
-    min-width: 250px;
-    margin: 64px 16px;
+    justify-content: space-evenly;
+    min-width: 350px;
+    margin: 64px 0px;
 }
 
 .buttons button {

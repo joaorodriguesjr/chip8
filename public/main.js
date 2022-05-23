@@ -38,6 +38,38 @@ fetch(`/roms/list.json`)
     .then(roms => {
         const parent = document.querySelector('#roms')
 
+        let rom = 0
+        document.querySelector('#prev').onclick = () => {
+            rom--
+            if (rom < 0)
+                rom = roms.length - 1
+
+            fetch(`/roms/${roms[rom].file}`)
+            .then(response => response.arrayBuffer())
+            .then(buffer => {
+                chip8.machine.reset()
+                chip8.machine.load(buffer)
+                chip8.start()
+            })
+
+        }
+
+        document.querySelector('#next').onclick = () => {
+            rom++
+            if (rom >= roms.length)
+                rom = 0
+
+            fetch(`/roms/${roms[rom].file}`)
+            .then(response => response.arrayBuffer())
+            .then(buffer => {
+                chip8.machine.reset()
+                chip8.machine.load(buffer)
+                chip8.start()
+            })
+
+        }
+
+
         for (const rom of roms) {
             const label = document.createElement('label')
 
