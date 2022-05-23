@@ -2,7 +2,7 @@ The [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8) is a fun emulation project th
 
 There are many game roms scattered around the internet to be played on your version of the virtual machine.
 
-Currently this project already has the [35 opcodes implemented](https://github.com/joaorodriguesjr/chip8/blob/development/src/Chip8/Mapper.js) but is lacking a good input system on the interface. Maybe i should implement a virtual keyboard so the games can be played on a smartphone too.
+Currently this project already has the [35 opcodes implemented](https://github.com/joaorodriguesjr/chip8/blob/development/public/src/Chip8/Mapper.js) but is lacking a good input system on the interface. Maybe i should implement a virtual keyboard so the games can be played on a smartphone too.
 
 ### Development Environment
 
