@@ -46,7 +46,7 @@ export default class InputHandler {
 
             key.addEventListener('touchstart', () => {
                 this.onKeyDown(keyCode)
-            })
+            }, { passive: true })
 
             key.addEventListener('touchend', () => {
                 this.onKeyUp(keyCode)
