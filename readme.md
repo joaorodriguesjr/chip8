@@ -2,7 +2,7 @@ The [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8) is a fun emulation project th
 
 There are many game roms scattered around the internet to be played on your version of the virtual machine.
 
-![The screenshot of the project running on a browser](public/screenshot.png)
+[<img src="public/screenshot.png" width="350"/>](public/screenshot.png)
 
 ### Development Environment
 
