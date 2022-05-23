@@ -110,7 +110,7 @@ export default class Machine {
      *
      * @return {void}
      */
-    cycle() {
+    executeCycle() {
         if (this.HLT) return
 
         const HI = this.memory.read(this.PC + 0)

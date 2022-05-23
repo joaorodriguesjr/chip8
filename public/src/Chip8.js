@@ -25,8 +25,8 @@ export default class Chip8 {
 
         this.peripherals.audioPlayer.initialize(new AudioContext())
         this.peripherals.listen(this.machine.events)
-        this.intervals.cycles = setInterval(() => this.machine.cycle()       , 2.0)
-        this.intervals.timers = setInterval(() => this.machine.updateTimers(), 16.666 )
+        this.intervals.cycles = setInterval(() => this.machine.executeCycle(), 2.0   )
+        this.intervals.timers = setInterval(() => this.machine.updateTimers(), 16.666)
 
         this.running = true
     }
