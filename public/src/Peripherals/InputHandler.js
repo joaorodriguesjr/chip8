@@ -7,7 +7,6 @@ export default class InputHandler {
      */
     constructor(keyboard, document) {
         this.keyboard = keyboard
-
         document.addEventListener('keydown', (event) => this.onKeyDown(event.keyCode))
         document.addEventListener('keyup'  , (event) => this.onKeyUp(event.keyCode))
 
@@ -32,6 +31,27 @@ export default class InputHandler {
             [70, 0x0E],
             [86, 0x0F]
         ])
+
+        document.querySelectorAll('.key').forEach(key => {
+            const keyCode = parseInt(key.dataset.key, 16)
+            this.keys.set(keyCode, keyCode)
+
+            key.addEventListener('mousedown', () => {
+                this.onKeyDown(keyCode)
+            })
+
+            key.addEventListener('mouseup', () => {
+                this.onKeyUp(keyCode)
+            })
+
+            key.addEventListener('touchstart', () => {
+                this.onKeyDown(keyCode)
+            })
+
+            key.addEventListener('touchend', () => {
+                this.onKeyUp(keyCode)
+            })
+        })
     }
 
     /**

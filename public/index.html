@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CHIP-8 - Virtual Machine</title>
     <meta name="description" content="A Chip-8 interpreter written in Javascript">
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles.css?v">
 </head>
 <body>
     <div class="container">
@@ -17,7 +17,25 @@
             <button id="reset">RESET</button>
         </div>
         <div id="roms" class="roms"></div>
+        <div id="keypad" class="keypad">
+            <button data-key="1" class="key" id="key-1">1</button>
+            <button data-key="2" class="key" id="key-2">2</button>
+            <button data-key="3" class="key" id="key-3">3</button>
+            <button data-key="C" class="key" id="key-C">C</button>
+            <button data-key="4" class="key" id="key-4">4</button>
+            <button data-key="5" class="key" id="key-5">5</button>
+            <button data-key="6" class="key" id="key-6">6</button>
+            <button data-key="D" class="key" id="key-D">D</button>
+            <button data-key="7" class="key" id="key-7">7</button>
+            <button data-key="8" class="key" id="key-8">8</button>
+            <button data-key="9" class="key" id="key-9">9</button>
+            <button data-key="E" class="key" id="key-E">E</button>
+            <button data-key="A" class="key" id="key-A">A</button>
+            <button data-key="0" class="key" id="key-0">0</button>
+            <button data-key="B" class="key" id="key-B">B</button>
+            <button data-key="F" class="key" id="key-F">F</button>
+        </div>
     </div>
-    <script type="module" src="./main.js"></script>
+    <script type="module" src="./main.js?v"></script>
 </body>
 </html>
