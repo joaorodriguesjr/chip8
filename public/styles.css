@@ -126,49 +126,6 @@ canvas {
     color: #33ff66;
 }
 
-.roms {
-    display: none;
-    margin-top: 16px;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #272727;
-    position: relative;
-    height: 250px;
-    background-color: #282828;
-    overflow-y: scroll;
-    color: #33ff66;
-    font-family: 'Roboto Mono', 'Share Tech Mono', monospace;
-}
-
-.roms label {
-    display: flex;
-    cursor: pointer;
-}
-
-.roms input {
-    /* position: absolute;
-    top: 0;
-    left: 0; */
-    opacity: 0;
-    cursor: pointer;
-}
-
-.roms span {
-    margin-left: -24px;
-    padding: 4px 8px 2px 8px;
-    border-radius: 2px;
-}
-
-.roms input:checked + span {
-    background: #33ff66;
-    color: #292929;
-}
-
-.roms input:focus + span {
-    background-color: #155c27;
-    color: #33ff66;
-}
-
 @media (max-width: 1000px) {
 
     canvas {
