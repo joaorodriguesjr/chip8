@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chip8
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: chip8
+  template:
+    metadata:
+      labels:
+        app: chip8
+    spec:
+      containers:
+      - name: chip8
+        image: CONTAINER_IMAGE
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 10m
+            memory: 10Mi
+        ports:
+        - containerPort: 80

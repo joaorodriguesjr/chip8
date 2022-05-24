@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chip8
+  annotations:
+    kubernetes.io/ingress.class: "public"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  labels:
+    name: chip8
+spec:
+  tls:
+  - hosts:
+    - chip8.joaorodriguesjr.com
+    secretName: chip8-tls
+  rules:
+  - host: chip8.joaorodriguesjr.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: chip8
+            port:
+              number: 80
