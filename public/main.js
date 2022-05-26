@@ -2,6 +2,7 @@ import Chip8 from './src/Chip8.js'
 
 const chip8 = Chip8.create()
 const indicator = document.querySelector('.indicator')
+const romDisplay = document.querySelector('.rom')
 
 function fetchRom(url) {
     fetch(url).then(response => response.arrayBuffer()).then(buffer => {
@@ -38,6 +39,7 @@ window.onresize = (event) => {
 }
 
 fetchRom(`/roms/Chip8 emulator Logo [Garstyciuks].ch8`)
+romDisplay.innerText = 'Chip8 emulator Logo [Garstyciuks].ch8'
 
 fetch(`/roms/list.json`)
     .then(response => response.json()).then(roms => {
@@ -49,13 +51,15 @@ fetch(`/roms/list.json`)
                 current = roms.length - 1
 
             fetchRom(`/roms/${roms[current].file}`)
+            romDisplay.innerText = roms[current].file
         }
 
         document.querySelector('#next').onclick = () => {
             current++
             if (current >= roms.length)
-                current = 0
+            current = 0
 
             fetchRom(`/roms/${roms[current].file}`)
+            romDisplay.innerText = roms[current].file
         }
     })
