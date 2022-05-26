@@ -26,10 +26,12 @@ document.querySelector('#reset').onclick = () => chip8.reset()
 
 
 window.onresize = (event) => {
+    const display = chip8.machine.display
     const canvas = document.querySelector('.canvas')
-    const scale = Math.round(window.innerWidth / 64) - 1
-    canvas.width = scale * 64
-    canvas.height = scale * 32
+    const scale = Math.floor(window.innerWidth / (display.cols + 2))
+
+    canvas.width = scale * display.cols
+    canvas.height = scale * display.rows
     chip8.peripherals.renderer.scale = scale
     chip8.peripherals.renderer.context.fillStyle = '#33ff66'
     chip8.machine.display.render()

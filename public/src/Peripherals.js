@@ -33,12 +33,10 @@ export default class Peripherals {
      * @param {Keyboard} keyboard
      */
     static create(display, keyboard) {
-        let rendererScale = 12
+        const colWidth = (display.cols + 2)
+        let rendererScale = Math.floor(window.innerWidth / colWidth)
 
-        if (window.innerWidth < 800)
-            rendererScale = Math.round(window.innerWidth / 64)
-
-        const canvas  = document.querySelector('#display-canvas')
+        const canvas  = document.querySelector('.canvas')
         canvas.width  = display.cols * rendererScale
         canvas.height = display.rows * rendererScale
 
