@@ -37,6 +37,8 @@ html, body, .container {
   }
 
 .container {
+    max-width: 800px;
+    margin: 0 auto;
     position: relative;
     display: flex;
     flex-direction: column;
