@@ -38,8 +38,8 @@ window.onresize = (event) => {
     chip8.machine.display.render()
 }
 
-fetchRom(`/roms/Chip8 emulator Logo [Garstyciuks].ch8`)
 romDisplay.innerText = 'Chip8 emulator Logo [Garstyciuks].ch8'
+fetchRom(`/roms/${romDisplay.innerText}`)
 
 fetch(`/roms/list.json`)
     .then(response => response.json()).then(roms => {
