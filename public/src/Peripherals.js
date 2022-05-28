@@ -34,18 +34,18 @@ export default class Peripherals {
      */
     static create(display, keyboard) {
         const colWidth = (display.cols + 2)
-        let rendererScale = Math.floor(window.innerWidth / colWidth)
+        let scale = Math.floor(window.innerWidth / colWidth)
         let limit = Math.floor(800 / display.cols)
 
-        if (rendererScale > limit) {
-            rendererScale = limit
+        if (scale > limit) {
+            scale = limit
         }
 
         const canvas  = document.querySelector('.canvas')
-        canvas.width  = display.cols * rendererScale
-        canvas.height = display.rows * rendererScale
+        canvas.width  = display.cols * scale
+        canvas.height = display.rows * scale
 
-        const renderer = new Renderer(canvas, rendererScale)
+        const renderer = new Renderer(canvas, scale)
         display.renderer = renderer
 
         const inputHandler = new InputHandler(keyboard, document)

@@ -29,11 +29,11 @@ document.querySelector('#reset').onclick = () => chip8.reset()
 window.onresize = (event) => {
     const display = chip8.machine.display
     const canvas = document.querySelector('.canvas')
-    const scale = Math.floor(window.innerWidth / (display.cols + 2))
+    let scale = Math.floor(window.innerWidth / (display.cols + 2))
     let limit = Math.floor(800 / display.cols)
 
-    if (rendererScale > limit) {
-        rendererScale = limit
+    if (scale > limit) {
+        scale = limit
     }
 
     canvas.width = scale * display.cols
