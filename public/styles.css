@@ -53,7 +53,7 @@ canvas {
     padding: 8px;
 }
 
-.buttons {
+.controls {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -61,7 +61,7 @@ canvas {
     margin: 64px 0px;
 }
 
-.buttons button {
+.controls button {
     margin: 0px 4px;
     padding: 8px 16px;
     background-color: transparent;
@@ -72,12 +72,12 @@ canvas {
     outline: none;
 }
 
-.buttons button:focus {
+.controls button:focus {
     background-color: #155c27;
     color: #33ff66;
 }
 
-.buttons button:active {
+.controls button:active {
     background-color: #33ff66;
     color: #292929;
 }
