@@ -48,7 +48,6 @@ html, body, .container {
 }
 
 canvas {
-    /* background: #353535; */
     border: 4px solid #33ff66;
     border-radius: 4px;
     padding: 8px;
