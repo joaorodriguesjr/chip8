@@ -27,7 +27,6 @@ export default class Peripherals {
         events.listen('SOUND_STOP', () => this.audioPlayer.stop())
     }
 
-
     /**
      * @param {Display} display
      * @param {Keyboard} keyboard
