@@ -2,14 +2,16 @@ version: "3.3"
 
 services:
   server:
-    image: nginx:alpine
+    image: node:alpine
+    user: node
+    working_dir: /home/node/public
+    command: npx live-server
+    ports:
+      - 8080:8080
     volumes:
-      - ../public:/usr/share/nginx/html
-      - ../nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ../public:/home/node/public
     networks:
       - chip8
-    ports:
-      - 8000:80
 
 networks:
   chip8:
