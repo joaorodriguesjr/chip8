@@ -9,3 +9,7 @@ There are many game roms scattered around the internet to be played on your vers
 ```shell
 docker-compose --file docker/compose.yml --project-name chip8 up
 ```
+
+## Production Environment
+
+![Kubernetes Deployment](https://github.com/joaorodriguesjr/chip8/actions/workflows/deployment.yml/badge.svg)

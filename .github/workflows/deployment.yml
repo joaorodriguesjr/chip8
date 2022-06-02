@@ -1,4 +1,4 @@
-name: Delivery workflow
+name: Deployment Workflow
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
     - '*'
 
 jobs:
-  delivery:
+  deployment:
     runs-on: self-hosted
     permissions:
       packages: write
