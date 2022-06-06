@@ -13,18 +13,17 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Revision
-      run: |
-        sed -i 's#REVISION_HASH#${{ github.ref_name }}#' public/index.html
+    - name: Revision tag
+      run: sed -i 's#REVISION_HASH#${{ github.ref_name }}#' public/index.html
 
-    - name: Login
+    - name: Image registry login
       uses: docker/login-action@v1
       with:
         registry: ghcr.io
         username: joaorodriguesjr
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build
+    - name: Container image build
       uses: docker/build-push-action@v2
       with:
         file: docker/dockerfile
@@ -32,13 +31,11 @@ jobs:
         tags: ghcr.io/joaorodriguesjr/chip8:${{ github.ref_name }}
         push: true
 
-    - name: Apply
-      run: |
-        sed -i 's#CONTAINER_IMAGE#ghcr.io/joaorodriguesjr/chip8:${{ github.ref_name }}#' kubernetes/deployment.yml
-        microk8s.kubectl apply -f kubernetes/deployment.yml
-        microk8s.kubectl apply -f kubernetes/service.yml
-        microk8s.kubectl apply -f kubernetes/ingress.yml
+    - name: Container image name substitution
+      run: sed -i 's#CONTAINER_IMAGE#ghcr.io/joaorodriguesjr/chip8:${{ github.ref_name }}#' kubernetes/deployment.yml
 
-    - name: Rollout
-      run: |
-        microk8s.kubectl rollout restart deployment.apps/chip8
+    - name: Containers orchestration
+      run: microk8s.kubectl apply -f kubernetes
+
+    - name: Version rollout
+      run: microk8s.kubectl rollout restart deployment.apps/chip8
